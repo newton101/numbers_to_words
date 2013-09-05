@@ -1,42 +1,10 @@
-class Fixnum
-  def unit?
-    (0..9).cover? self
-  end
-
-  def teens?
-    (10..19).cover? self
-  end
-
-  def tens?
-    (20..99).cover? self
-  end
-
-  def hundreds?
-    (100..999).cover? self
-  end
-
-  def to_tens
-    if self.tens?
-      ten_number = self.to_s[0]
-      (ten_number + "0").to_i
-    else
-      raise 'Cannot convert this number'
-    end
-  end
-  def to_hundreds
-    if self.hundreds?
-      hundred_number = self.to_s[0]
-      (hundred_number + "00").to_i
-    else
-      raise 'Cannot convert this number'
-    end
-  end
-end
+require './fix_num_extension'
 
 class NumberConvertor
   UNITS = {0 => "", 1 => "One", 2 => "Two", 3 => "Three", 4 => "Four", 5 => "Five", 6 => "Six", 7 => "Seven", 8 => "Eight", 9 => "Nine"}
-  IRREGULAR_TEENS = {10 => "Ten", 11 => "Eleven", 12 => "Twelve", 13 => "Thirteen", 15 => "Fifteen", 18 => "Eighteen"}
+  TEENS = {10 => "Ten", 11 => "Eleven", 12 => "Twelve", 13 => "Thirteen", 14 => "Fourteen",  15 => "Fifteen",16 => "Sixteen", 17 => "Seventeen", 18 => "Eighteen", 19 => "Nineteen"}
   TENS = {20 => "Twenty",30 => "Thirty", 40 => "Fourty", 50 => "Fifty", 60 => "Sixty", 70 => "Seventy", 80 => "Eighty", 90 => "Ninety" }
+  JOINER = {4 => "thousand", 5 => "thousand", 6 => "thousand", 7 => "million"}
 
 
   def to_words(integer)
@@ -49,14 +17,22 @@ class NumberConvertor
     when integer.unit?
       single_as_word integer
     when integer.teens?
-      irregular_teens_as_word(integer) || normal_teens_as_word(integer)
+      teens_as_word(integer)
     when integer.tens?
       tens_as_words integer
     when integer.hundreds?
       hundreds_as_words integer
+    else
+      big_number_as_word integer
     end
   end
 
+  def big_number_as_word(integer)
+    number_of_digits =  integer.integer_size
+    cut_off_point = comma_point(number_of_digits)
+    wordified_number = split_and_wordify(integer, cut_off_point)
+    truncate_and(wordified_number)
+  end
 
 
   private
@@ -66,14 +42,9 @@ class NumberConvertor
     UNITS[integer]
   end
 
-  def irregular_teens_as_word(integer)
-    return false if IRREGULAR_TEENS[integer].nil?
-    IRREGULAR_TEENS[integer]
-  end
-
-  def normal_teens_as_word(integer)
-    base_number = integer.to_s[1].to_i
-    UNITS[base_number] + "teen"
+  def teens_as_word(integer)
+    return false if TEENS[integer].nil?
+    TEENS[integer]
   end
 
   def tens_as_words(integer)
@@ -85,5 +56,23 @@ class NumberConvertor
     non_hundred = integer - integer.to_hundreds
     hundred_number = integer.to_s[0].to_i
     UNITS[hundred_number] + " hundred and " + wordify(non_hundred)
+  end
+
+  def split_and_wordify(integer, cut_off_point)
+    first_part = integer.to_s[0...cut_off_point].to_i
+    second_part = integer.to_s[cut_off_point..integer.integer_size].to_i
+    wordify(first_part) +" "+ JOINER[integer.integer_size] + " "+ wordify(second_part)
+  end
+
+  def comma_point(number_of_digits)
+    (number_of_digits - 1) % 3 + 1
+  end
+
+  def truncate_and(wordified_number)
+    split_word = wordified_number.split
+    if split_word.last == "and"
+       split_word.delete_at(-1)
+    end
+    split_word.join(' ')
   end
 end

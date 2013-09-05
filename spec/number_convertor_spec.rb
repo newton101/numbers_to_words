@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 describe NumberConvertor do
   let(:convertor) { NumberConvertor.new }
 
@@ -28,14 +27,9 @@ describe NumberConvertor do
   context 'teens' do
     it 'converts irregular numbers to words' do
       convertor.to_words(10).should == "Ten"
-      convertor.to_words(11).should == "Eleven"
       convertor.to_words(12).should == "Twelve"
-    end
-    it 'converts normal numbers to words' do
-      convertor.to_words(13).should == "Thirteen"
       convertor.to_words(16).should == "Sixteen"
       convertor.to_words(19).should == "Nineteen"
-      # 18 => eigtheen irregular?
     end
   end
   context 'tens' do
@@ -52,14 +46,12 @@ describe NumberConvertor do
       convertor.to_words(999).should == "Nine hundred and Ninety Nine"
     end
   end
+  context 'greater than 999' do
+    it 'converts numbers to words' do
+      convertor.to_words(3400).should == "Three thousand Four hundred"
+      convertor.to_words(60304).should == "Sixty thousand Three hundred and Four"
+      convertor.to_words(999992).should == "Nine hundred and Ninety Nine thousand Nine hundred and Ninety Two"
+      convertor.to_words(1000327).should == "One million Three hundred and Twenty Seven"
+    end
+  end
 end
-
-
-  # context '#base_number?' do
-  #   it 'returns true if number is between 0-9' do
-  #     convertor.single_digit?(1).should be_true
-  #   end
-  #   it 'returns false if number is not between 0-9' do
-  #     convertor.si(11).should be_false
-  #   end
-  # end
