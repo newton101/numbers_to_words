@@ -16,22 +16,22 @@ describe NumberConvertor do
     34.tens?.should == true
   end
 
-  it 'converts single digits as words' do
+  it 'converts single digits to words' do
     convertor.to_words(1).should == "One"
     convertor.to_words(3).should == "Three"
     convertor.to_words(7).should == "Seven"
   end
-  it 'converts double_digits as words' do
+  it 'converts double_digits to words' do
     convertor.to_words(1).should == "One"
   end
 
   context 'teens' do
-    it 'converts irregular numbers as words' do
+    it 'converts irregular numbers to words' do
       convertor.to_words(10).should == "Ten"
       convertor.to_words(11).should == "Eleven"
       convertor.to_words(12).should == "Twelve"
     end
-    it 'converts normal numbers as words' do
+    it 'converts normal numbers to words' do
       convertor.to_words(13).should == "Thirteen"
       convertor.to_words(16).should == "Sixteen"
       convertor.to_words(19).should == "Nineteen"
@@ -39,13 +39,19 @@ describe NumberConvertor do
     end
   end
   context 'tens' do
-    it 'converts numbers from 20-99 as words' do
+    it 'converts numbers from 20-99 to words' do
       convertor.to_words(34).should == "Thirty Four"
       convertor.to_words(63).should == "Sixty Three"
       convertor.to_words(99).should == "Ninety Nine"
     end
   end
-
+  context 'hundreds' do
+    it 'converts numbers from 100-999 to words' do
+      convertor.to_words(340).should == "Three hundred and Fourty"
+      convertor.to_words(630).should == "Six hundred and Thirty"
+      convertor.to_words(999).should == "Nine hundred and Ninety Nine"
+    end
+  end
 end
 
 
