@@ -33,7 +33,7 @@ class Fixnum
     end
   end
 
-  def integer_size
+  def size
     self.to_s.size
   end
 end

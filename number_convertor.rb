@@ -1,4 +1,4 @@
-require './fix_num_extension'
+  require './fix_num_extension'
 
 class NumberConvertor
   UNITS = {0 => "", 1 => "One", 2 => "Two", 3 => "Three", 4 => "Four", 5 => "Five", 6 => "Six", 7 => "Seven", 8 => "Eight", 9 => "Nine"}
@@ -27,11 +27,9 @@ class NumberConvertor
     end
   end
 
-  def big_number_as_word(integer)
-    number_of_digits =  integer.integer_size
-    cut_off_point = comma_point(number_of_digits)
-    wordified_number = split_and_wordify(integer, cut_off_point)
-    truncate_and(wordified_number)
+  def big_number_as_word(big_integer)
+    cut_off_point = comma_point(big_integer.size)
+    truncate_trailing_and wordified_big_number(big_integer, cut_off_point)
   end
 
 
@@ -58,17 +56,17 @@ class NumberConvertor
     UNITS[hundred_number] + " hundred and " + wordify(non_hundred)
   end
 
-  def split_and_wordify(integer, cut_off_point)
+  def wordified_big_number(integer, cut_off_point)
     first_part = integer.to_s[0...cut_off_point].to_i
-    second_part = integer.to_s[cut_off_point..integer.integer_size].to_i
-    wordify(first_part) +" "+ JOINER[integer.integer_size] + " "+ wordify(second_part)
+    second_part = integer.to_s[cut_off_point..integer.size].to_i
+    wordify(first_part) +" "+ JOINER[integer.size] + " "+ wordify(second_part)
   end
 
   def comma_point(number_of_digits)
     (number_of_digits - 1) % 3 + 1
   end
 
-  def truncate_and(wordified_number)
+  def truncate_trailing_and(wordified_number)
     split_word = wordified_number.split
     if split_word.last == "and"
        split_word.delete_at(-1)

@@ -53,11 +53,11 @@ describe Fixnum do
     end
   end
 
-  context '#integer_size' do
+  context '#size' do
     it 'returns the number of digits for that number' do
-      123.integer_size == 3
-      12345.integer_size == 5
-      1234567.integer_size == 7
+      123.size == 3
+      12345.size == 5
+      1234567.size == 7
     end
   end
 end
