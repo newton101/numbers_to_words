@@ -8,8 +8,8 @@ class NumberConvertor
 
 
   def to_words(integer)
-    wordified = wordify integer
-    wordified.rstrip
+    raise 'Error converting this number' if wordify(integer).nil?
+    wordify(integer).rstrip
   end
 
   def wordify(integer)

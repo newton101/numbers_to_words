@@ -20,6 +20,9 @@ describe NumberConvertor do
     convertor.to_words(3).should == "Three"
     convertor.to_words(7).should == "Seven"
   end
+  it 'returns nothing for 0' do
+    convertor.to_words(0).should == ""
+  end
   it 'converts double_digits to words' do
     convertor.to_words(1).should == "One"
   end
